@@ -12,8 +12,9 @@
   editablePackageSources ? {},
   extraPackages ? ps: [],
   preferWheels ? false,
+  buildInputs ? [],
 }: let
-  env = pkgs.poetry2nix.mkPoetryEnv {
+  pythonEnv = pkgs.poetry2nix.mkPoetryEnv {
     inherit
       projectDir
       pyproject
@@ -25,6 +26,9 @@
       preferWheels
       ;
   };
+  env = pythonEnv.overrideAttrs (oldAttrs: {
+    inherit buildInputs;
+  });
 in {
   inherit name displayName;
   language = "python";
